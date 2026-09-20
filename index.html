@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem('driftTheme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drift — Practice for game-based psychometric assessments</title>
+<meta name="description" content="Free practice games modelled on Arctic Shores-style game-based psychometric assessments — memory, focus, risk, reasoning, and more. No sign-up, no data collected.">
+<link rel="canonical" href="https://dh4ny4.github.io/drift-practice/">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#1d5fbf">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Drift — Practice for game-based psychometric assessments">
+<meta property="og:description" content="Free practice games modelled on Arctic Shores-style assessments, plus a randomized 7-game mock test with a scorecard.">
+<meta property="og:url" content="https://dh4ny4.github.io/drift-practice/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Drift — Practice for game-based psychometric assessments">
+<meta name="twitter:description" content="Free practice games modelled on Arctic Shores-style assessments, plus a randomized 7-game mock test with a scorecard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- AdSense: once your site is approved, uncomment this line and put your
+     publisher ID in the data-ad-client attribute (find it in AdSense >
+     Account > Settings). Leave it commented out until then. -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <div class="brand-name">Drift</div>
+        <div class="brand-sub">Practice for gamified assessments</div>
+      </div>
+    </div>
+    <div class="datapoints">
+      <div>data points collected</div>
+      <div class="num mono" id="dpCount">0</div>
+    </div>
+  </div>
+
+  <nav class="site-nav">
+    <a class="nav-brand" href="index.html"><span class="mark"></span> Drift</a>
+    <div class="nav-links">
+      <div class="nav-dropdown">
+        <button class="nav-dropbtn" id="gamesDropBtn" type="button">Games ▾</button>
+        <div class="nav-dropmenu" id="gamesDropMenu">
+          <a href="index.html#sequence">Sequence</a>
+          <a href="index.html#direction">Direction</a>
+          <a href="index.html#team">Team</a>
+          <a href="index.html#ticket">Ticket</a>
+          <a href="index.html#balloon">Preparation</a>
+          <a href="index.html#expression">Expression</a>
+          <a href="index.html#lock">Security</a>
+          <a href="index.html#patterns">Patterns</a>
+          <a href="index.html#energy">Energy</a>
+          <a href="index.html#analysis">Analysis</a>
+          <a href="index.html#weather">Weather</a>
+        </div>
+      </div>
+      <a class="nav-link current" href="index.html">Home</a>
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="privacy.html">Privacy</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">🌙</button>
+    </div>
+  </nav>
+
+  <!-- ADBLOCK NOTICE: shown only if the bait element near the end of the page gets hidden/removed -->
+  <div class="adblock-notice" id="adblockNotice">
+    This site is supported by ads. If you're using an ad blocker, please consider allowlisting this site.
+  </div>
+
+  <!-- AD SLOT: top banner (persistent across every screen) -->
+  <!-- Paste your ad network's script/ins tag inside this div. -->
+  <div class="ad-slot ad-slot-top" id="adSlotTop"><span>Ad space</span></div>
+
+  <!-- HOME -->
+  <div class="home-view" id="homeView">
+    <div class="intro">
+      <h1>Get comfortable with the format before it counts.</h1>
+      <p>Arctic Shores–style assessments don't have right answers — they watch how you play. These mini-games mirror the mechanics candidates report seeing most often, from memory sequences to probabilistic learning. Play each a few times so the format feels familiar, not the content. New to this kind of test? Read <a href="about.html" style="color: var(--aurora-teal);">what psychometric assessments are</a> first.</p>
+    </div>
+
+    <div class="test-callout">
+      <div>
+        <h2>Try a full mock test</h2>
+        <p>7 games, picked at random, run back-to-back like the real thing — with a scorecard at the end.</p>
+      </div>
+      <button class="btn primary" onclick="startTestMode()">Start test mode</button>
+    </div>
+
+    <div class="grid" id="cardGrid"></div>
+
+    <!-- AD SLOT: in-feed (home screen only) -->
+    <div class="ad-slot ad-slot-infeed" id="adSlotInfeed"><span>Ad space</span></div>
+
+    <div class="tips">
+      <h3>Before you play the real thing</h3>
+      <ul>
+        <li>There's no pass/fail score to chase — these games read behaviour, not "correct" answers, so play at a pace that's genuinely yours rather than a stressed guess-fast pace.</li>
+        <li>Read each task's on-screen instructions fully before starting; the rules often change slightly round to round.</li>
+        <li>Expect distractors. Several games deliberately show information you should ignore — resisting it is part of what's measured.</li>
+        <li>Find somewhere quiet with a stable connection, and try to complete the real assessment in one sitting.</li>
+        <li>Rest before you start. Fatigue shows up in reaction-time and risk-taking data more than people expect.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SEQUENCE -->
+  <div class="game-view" id="view-sequence">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Sequence</h2>
+      <div class="stat">round <b id="seqRound">1</b> · best <b id="seqBest">—</b></div>
+    </div>
+    <p class="game-instructions">Watch the tiles light up, then click them back in the same order. One or two tiles will flash a different colour — those are decoys; ignore them. Sequences get longer as you go.</p>
+    <div class="stage">
+      <div class="msg" id="seqMsg"></div>
+      <div class="seq-grid" id="seqGrid"></div>
+      <div class="row">
+        <button class="btn primary" id="seqStart" onclick="seqStartRound()">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIRECTION -->
+  <div class="game-view" id="view-direction">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Direction</h2>
+      <div class="stat">round <b id="dirRound">0</b>/<span id="dirTotal">24</span> · accuracy <b id="dirAcc">—</b></div>
+    </div>
+    <p class="game-instructions">Look only at the <em>middle</em> arrow, dead centre of the grid. Press <b>Q</b> if it points left, <b>P</b> if it points right — the arrows around it point every which way to throw you off, so ignore them. But if every other arrow is swapped for an <b>X</b>, that's a stop signal: don't press anything that round.</p>
+    <div class="stage">
+      <div class="msg" id="dirMsg"></div>
+      <div class="progress-bar" style="width:100%;max-width:320px;"><div id="dirTimer"></div></div>
+      <div class="arrow-board" id="dirBoard"></div>
+      <div class="row">
+        <button class="btn" onclick="dirAnswer('left')">Q · Left</button>
+        <button class="btn" onclick="dirAnswer('right')">P · Right</button>
+      </div>
+      <div class="row"><button class="btn primary" id="dirStart" onclick="dirStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- PREPARATION (balloon) -->
+  <div class="game-view" id="view-balloon">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Preparation</h2>
+      <div class="stat">balloon <b id="balRound">0</b>/10</div>
+    </div>
+    <p class="game-instructions">Each pump inflates the balloon and adds to its value. Balloons pop at random — when one pops, its value is lost. Bank at any time to lock in what you've earned so far and move to the next balloon.</p>
+    <div class="stage">
+      <div class="msg" id="balMsg"></div>
+      <div class="balloon-wrap">
+        <div class="balloon" id="balloonEl"></div>
+        <div class="cash-row">
+          <div><span class="label">this balloon</span><span class="value mono" id="balCurrent">0</span></div>
+          <div><span class="label">banked total</span><span class="value bank mono" id="balBank">0</span></div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="balPump" onclick="balPump()">Pump</button>
+        <button class="btn" id="balBankBtn" onclick="balBankIt()">Bank it</button>
+        <button class="btn ghost" id="balStart" onclick="balStart()">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURITY (lock) -->
+  <div class="game-view" id="view-lock">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Security</h2>
+      <div class="stat">round <b id="lockRound">0</b>/10 · target <b id="lockTargetHour">—</b> · streak <b id="lockStreak">0</b></div>
+    </div>
+    <p class="game-instructions">The dial is a clock face, numbered 1 to 12. Click "Stop" the instant the needle crosses the highlighted zone at the target number. It doesn't just spin at a constant speed — it can pause and resume, speed up, or reverse direction partway round, often right at one of the numbers, so watch its actual motion rather than expecting a steady rhythm. Miss the zone and the round restarts.</p>
+    <div class="stage">
+      <div class="msg" id="lockMsg"></div>
+      <div class="lock-wrap">
+        <div class="lock-numbers" id="lockNumbers"></div>
+        <div class="lock-ring">
+          <div class="lock-target" id="lockTarget"></div>
+          <div class="lock-needle" id="lockNeedle"></div>
+          <div class="lock-center"></div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="lockStop" onclick="lockStop()" disabled>Stop</button>
+        <button class="btn ghost" id="lockStart" onclick="lockStart()">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENERGY -->
+  <div class="game-view" id="view-energy">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Energy</h2>
+      <div class="stat">presses left <b id="enPresses">30</b> · generator <b id="enGenNum">1</b>/3</div>
+    </div>
+    <p class="game-instructions">Each press changes the generator's power — sometimes up, sometimes down, following a hidden pattern that resets with each new generator. Learn the rhythm and keep the power from hitting empty.</p>
+    <div class="stage">
+      <div class="msg" id="enMsg"></div>
+      <div class="energy-wrap">
+        <div class="energy-meter"><div id="enMeter"></div></div>
+        <button class="gen-btn" id="enBtn" onclick="enPress()">Press</button>
+      </div>
+      <div class="row"><button class="btn ghost" id="enStart" onclick="enStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- TEAM -->
+  <div class="game-view" id="view-team">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Team</h2>
+      <div class="stat">round <b id="teamRound">0</b>/12 · you <b id="teamYouTotal">0</b> · opponent <b id="teamOppTotal">0</b></div>
+    </div>
+    <p class="game-instructions">You and a computer-played team sell the same product and each set a price every round. Both high: you split a large, steady payout. Both low: a small, even one. One high and one low: the low-price team takes everything. Your opponent reacts to how you've been playing.</p>
+    <div class="stage">
+      <div class="msg" id="teamMsg"></div>
+      <div class="team-history" id="teamHistory"></div>
+      <div class="row">
+        <button class="btn primary" id="teamHighBtn" onclick="teamChoose('high')" disabled>Set high price</button>
+        <button class="btn" id="teamLowBtn" onclick="teamChoose('low')" disabled>Set low price</button>
+      </div>
+      <div class="row"><button class="btn ghost" id="teamStart" onclick="teamStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- TICKET -->
+  <div class="game-view" id="view-ticket">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Ticket</h2>
+      <div class="stat">round <b id="ticketRound">0</b>/24 · accuracy <b id="ticketAcc">—</b></div>
+    </div>
+    <p class="game-instructions">A shape with a number lands in either the top or the bottom box. In the <b>top</b> box, only the number matters — odd is P, even is Q, ignore the shape. In the <b>bottom</b> box, only the shape matters — rounded is Q, cornered is P, ignore the number. Same keys either way, different rule depending where it lands.</p>
+    <div class="stage">
+      <div class="msg" id="ticketMsg"></div>
+      <div class="progress-bar" style="width:100%;max-width:320px;"><div id="ticketTimer"></div></div>
+      <div class="ticket-boxes" id="ticketBoxes">
+        <div class="ticket-box" id="ticketBoxUpper"><span class="ticket-label">top</span></div>
+        <div class="ticket-box" id="ticketBoxLower"><span class="ticket-label">bottom</span></div>
+      </div>
+      <div class="row">
+        <button class="btn" onclick="ticketAnswer('left')">Q · Left</button>
+        <button class="btn" onclick="ticketAnswer('right')">P · Right</button>
+      </div>
+      <div class="row"><button class="btn primary" id="ticketStart" onclick="ticketStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- EXPRESSION -->
+  <div class="game-view" id="view-expression">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Expression</h2>
+      <div class="stat">round <b id="exRound">0</b>/20 · accuracy <b id="exAcc">—</b></div>
+    </div>
+    <p class="game-instructions">Match the face to the emotion it's showing, before the timer runs out.</p>
+    <div class="stage">
+      <div class="msg" id="exMsg"></div>
+      <div class="progress-bar" style="width:100%;max-width:320px;"><div id="exTimer"></div></div>
+      <div class="ex-face" id="exFace">🙂</div>
+      <div class="ex-options" id="exOptions"></div>
+      <div class="row"><button class="btn primary" id="exStart" onclick="exStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- PATTERNS -->
+  <div class="game-view" id="view-patterns">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Patterns</h2>
+      <div class="stat">round <b id="patRound">0</b>/12 · accuracy <b id="patAcc">—</b></div>
+    </div>
+    <p class="game-instructions">Four tiles follow a rule — a shape moving, or a count changing. Pick the tile from the options that continues the sequence.</p>
+    <div class="stage">
+      <div class="msg" id="patMsg"></div>
+      <div class="pat-row" id="patSequence"></div>
+      <div class="pat-arrow">continues as...</div>
+      <div class="pat-options" id="patOptions"></div>
+      <div class="row"><button class="btn primary" id="patStart" onclick="patStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- ANALYSIS -->
+  <div class="game-view" id="view-analysis">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Analysis</h2>
+      <div class="stat">round <b id="anRound">0</b>/8 · accuracy <b id="anAcc">—</b></div>
+    </div>
+    <p class="game-instructions">Each round is a small table of cities with an average claim and an average premium. Work out the answer — a calculator and a moment of arithmetic are entirely fair game here.</p>
+    <div class="stage" style="align-items:stretch;">
+      <div class="msg" id="anMsg"></div>
+      <table class="an-table" id="anTable"></table>
+      <div class="an-question" id="anQuestion"></div>
+      <div class="an-options" id="anOptions"></div>
+      <div class="row"><button class="btn primary" id="anStart" onclick="anStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- WEATHER -->
+  <div class="game-view" id="view-weather">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Weather</h2>
+      <div class="stat">round <b id="weatherRound">0</b>/<span id="weatherTotal">100</span> · accuracy <b id="weatherAcc">—</b></div>
+    </div>
+    <p class="game-instructions">Two symbols flash together. Neither means anything on its own, but certain pairings lean toward day or night more often than not — and that tendency can drift the longer you play, though not for every pairing. Guess Day or Night within 3 seconds; either way, you won't find out which it was until the full 3 seconds are up.</p>
+    <div class="stage">
+      <div class="msg" id="weatherMsg"></div>
+      <div class="progress-bar" style="width:100%;max-width:320px;"><div id="weatherTimer"></div></div>
+      <div class="weather-symbols" id="weatherSymbols"></div>
+      <div class="row">
+        <button class="btn" id="weatherDayBtn" onclick="weatherAnswer('day')">☀️ Day</button>
+        <button class="btn" id="weatherNightBtn" onclick="weatherAnswer('night')">🌙 Night</button>
+      </div>
+      <div class="row"><button class="btn primary" id="weatherStart" onclick="weatherStart()">Start</button></div>
+    </div>
+  </div>
+
+  <!-- TEST MODE SUMMARY -->
+  <div class="game-view" id="view-testsummary">
+    <button class="back-btn" onclick="goHome()">&larr; All games</button>
+    <div class="game-header">
+      <h2>Test complete</h2>
+    </div>
+    <p class="game-instructions">Here's how each of your 7 games went. These are single-session results, not the deeper multi-thousand-data-point profile a real assessment builds from — just a quick read on where you're strongest right now.</p>
+    <div class="test-summary-list" id="testSummaryList"></div>
+    <div class="row" style="margin-top:20px;">
+      <button class="btn primary" onclick="startTestMode()">Take another mock test</button>
+      <button class="btn ghost" onclick="goHome()">Back to all games</button>
+    </div>
+  </div>
+
+  <!-- AD SLOT: bottom banner (persistent across every screen) -->
+  <div class="ad-slot ad-slot-bottom" id="adSlotBottom"><span>Ad space</span></div>
+
+</div>
+
+<footer>
+  Independent practice tool inspired by publicly described game-based assessment formats. Not affiliated with or endorsed by Arctic Shores.
+  <br><a href="about.html">About</a> · <a href="privacy.html">Privacy</a>
+</footer>
+
+<!--
+  BAIT ELEMENT for adblock detection (kept out of the way).
+  Ad blockers commonly hide anything matching these class names. If this
+  element ends up with zero size, we treat it as evidence of a blocker and
+  show the notice above. This is a soft nag, not a real block — strict
+  filter lists can hide the notice too, and any blocker can simply allow
+  this specific class name once it's known.
+-->
+<div class="adsbygoogle ad-banner ads ad-placement" id="adblockBait" style="width:1px;height:1px;position:absolute;left:-9999px;top:-9999px;"></div>
+
+<script src="nav.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
